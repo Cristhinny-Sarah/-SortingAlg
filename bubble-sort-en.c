@@ -60,7 +60,7 @@ int main(){
 
     // sorting the array 'V'
     BubbleSort(V, n);
-    printf("\nThe array sorted looks like this: ");
+    printf("\nThe array sorted using Bubble Sort looks like this: ");
     // showing an array on the screen
     PrintArray(V, n);
 

@@ -62,7 +62,7 @@ int main(){
 
     // chamando a funcao para ordenar o vetor V
     BubbleSortIterativo(V, n);
-    printf("\nO vetor ordenado ficou da seguinte forma: ");
+    printf("\nO vetor ordenado usando o metodo Bubble Sort ficou da seguinte forma: ");
     // mostrando na tela o vetor
     PrintaVetor(V, n);
 

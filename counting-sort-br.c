@@ -1,6 +1,7 @@
 // Cristhinny Sarah P. Araujo
-// 11/11/2020
-// Selection é um algoritmo de ordenação onde a ideia é percorrer o vetor diversas vezes, e a cada passagem selecionar o menor elemento e ir ordenando de maneira crescente.
+// 12/11/2020
+// Counting Sort é um algoritmo de ordenação onde a ideia é não realizar comparaçoes, serao contadas quantas vezes cada número em um determinado intervalo aparece
+// e depois um outro vetor é preenchido com esses valores ordenados
 // Este arquivo contém uma implementação usando loops
 
 #include <stdio.h>
@@ -25,12 +26,12 @@ void GeraVetorAleatorio(int * V, int n);
  */
 void PrintaVetor(int * V, int n);
 
-/* Funcao ordena de maneira crescente um vetor V de n elementos usando o Selection Sort
+/* Funcao ordena de maneira crescente um vetor V de n elementos usando o Counting Sort
  * @param int * V = ponteiro para um vetor de inteiros
  * @param int n = quantidade de posicoes que o vetor V possui
  * return void
  */
-void SelectionSortIterativo(int * V, int n);
+void CountingSortIterativo(int * V, int n);
 
 
 int main(){
@@ -61,8 +62,8 @@ int main(){
     PrintaVetor(V, n);
 
     // chamando a funcao para ordenar o vetor V
-    SelectionSortIterativo(V, n);
-    printf("\nO vetor ordenado usando o metodo Selection Sort ficou da seguinte forma: ");
+    CountingSortIterativo(V, n);
+    printf("\nO vetor ordenado usando o metodo Counting Sort ficou da seguinte forma: ");
     // mostrando na tela o vetor
     PrintaVetor(V, n);
 
@@ -96,27 +97,41 @@ void PrintaVetor(int * V, int n){
     return;
 }
 
-void SelectionSortIterativo(int * V, int n){
-    // variavel para guardar a posição do menor valor de cada iteracao
-    int menor;
-    // variavel suporte para fazer as trocas de valores no vetor
-    int a;
-
-    for(int i = 0; i < n - 1; i++){
-        // vamos supor que o valor de 'i' seja o menor valor da iteração
-        menor = i;
-        for(int j = i + 1; j < n; j++){
-            // se o valor da posicao 'j' for menor que o da posicao 'menor', gardaremos 'j' em 'menor'
-            if(V[j] < V[menor])menor = j;
-        }
-        // só faremos a troca de posiçoes caso 'i' seja diferente de 'menor', pois se eles forem iguais 
-        // o valor já estará ordenado
-        if(i != menor){
-            a = V[i];
-            V[i] = V[menor];
-            V[menor] = a;
-        }
-    
+void CountingSortIterativo(int * V, int n){
+    int i;
+    // variavel auxiliar para modificar os valores de 'Contagem[]' ao fazer a contagem dos numeros em (1) e
+    // para andar no vetor V em (2) no momento da ordenaçao
+    int posicao;
+    // vamos criar o vetor para contar os numeros que aparecem
+    int * Contagem = NULL;
+    Contagem = (int *)malloc((MAX+1)*sizeof(int));
+    // se o vetor for NULL significa que nao consigos alocar memoria para ele, em seguida o programa e finalizado
+    if(Contagem == NULL){
+        printf("Nao foi possivel alocar memoria para o vetor de contagem. Finalizando o programa\n");
+        return;
     }
+    // vamos zerar o vetor de contagem para que possamos começar a ordenaçao
+    for(i = 0; i < MAX + 1; i++)Contagem[i] = 0;
+    // cada posiçao em 'Contagem[]' representa um valor que existe em 'V[]', cada vez que um valor aparecer em 'V[]'
+    // iremos incrementar 'Contagem[V[]]' em 1
+    for(i = 0; i < n; i++){
+        posicao = V[i];
+        Contagem[posicao] = Contagem[posicao] + 1;
+    }
+    // 'posicao' e uma varivel para auxiliar na análise do vetor 'V[]'
+    posicao = 0;
+    // agora vamos analisar cada posicao de 'Contagem[]' e ir ordenando os valores em 'V[]'
+    for(i = 0; i < MAX + 1; i++){
+        // se a posicao tiver sido contada entao o valor da posicao será jogada em 'V[]'
+        while(Contagem[i] > 0){
+            V[posicao] = i;
+            // retiramos uma instancia de 'Contagem[]' assim que o mesmo foi ordenado no vetor final
+            Contagem[i] = Contagem[i] - 1;
+            // incrementamos a variavel que está varrendo 'V[]'
+            posicao = posicao + 1;
+        }
+    }
+    // vamos liberar a memoria alocada para o vetor 'Contagem'
+    free(Contagem);
     return;
 }
